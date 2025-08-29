@@ -40,6 +40,24 @@ uv run uvicorn app:app --reload
 cd backend && uv run uvicorn app:app --reload --port 8000
 ```
 
+### Code Quality Tools
+```bash
+# Format code automatically
+./scripts/format.sh
+
+# Check code quality (formatting, imports, linting)
+./scripts/quality.sh
+
+# Individual tools
+uv run black backend/           # Format code
+uv run isort backend/           # Sort imports  
+uv run flake8 backend/          # Lint code
+
+# Check without making changes
+uv run black backend/ --check
+uv run isort backend/ --check
+```
+
 ### Development Server
 - Web interface: http://localhost:8000
 - API docs: http://localhost:8000/docs

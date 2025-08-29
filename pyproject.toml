@@ -16,7 +16,41 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "black>=25.1.0",
+    "flake8>=7.3.0",
+    "isort>=6.0.1",
     "pytest>=8.4.1",
     "pytest-asyncio>=1.1.0",
     "pytest-mock>=3.14.1",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  \.git
+  | \.venv
+  | \.env
+  | __pycache__
+  | build
+  | dist
+  | chroma_db
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["backend"]
+skip = [".venv", "__pycache__", "chroma_db"]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "W503", "E501"]
+exclude = [".venv", "__pycache__", "chroma_db"]
+per-file-ignores = [
+    "__init__.py:F401",
 ]

@@ -1,21 +1,23 @@
-import pytest
 import os
 import sys
-from unittest.mock import Mock, MagicMock
 from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+from unittest.mock import MagicMock, Mock
+
+import pytest
 
 # Add the backend directory to sys.path so we can import modules
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from models import Course, Lesson, CourseChunk, SourceWithLink
-from vector_store import SearchResults
 from config import Config
+from models import Course, CourseChunk, Lesson, SourceWithLink
+from vector_store import SearchResults
 
 
 @dataclass
 class TestConfig:
     """Test configuration that doesn't require real API keys"""
+
     ANTHROPIC_API_KEY: str = "test_key"
     ANTHROPIC_MODEL: str = "claude-sonnet-4-20250514"
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
@@ -39,29 +41,29 @@ def sample_lessons():
         Lesson(
             lesson_number=0,
             title="Introduction",
-            lesson_link="https://example.com/lesson0"
+            lesson_link="https://example.com/lesson0",
         ),
         Lesson(
-            lesson_number=1, 
+            lesson_number=1,
             title="Basic Concepts",
-            lesson_link="https://example.com/lesson1"
+            lesson_link="https://example.com/lesson1",
         ),
         Lesson(
             lesson_number=2,
             title="Advanced Topics",
-            lesson_link="https://example.com/lesson2"
-        )
+            lesson_link="https://example.com/lesson2",
+        ),
     ]
 
 
-@pytest.fixture  
+@pytest.fixture
 def sample_course(sample_lessons):
     """Sample course for testing"""
     return Course(
         title="Test Course on AI",
         course_link="https://example.com/course",
         instructor="Test Instructor",
-        lessons=sample_lessons
+        lessons=sample_lessons,
     )
 
 
@@ -73,20 +75,20 @@ def sample_course_chunks():
             content="This is an introduction to AI concepts. We'll cover machine learning basics.",
             course_title="Test Course on AI",
             lesson_number=0,
-            chunk_index=0
+            chunk_index=0,
         ),
         CourseChunk(
             content="Neural networks are fundamental building blocks of deep learning systems.",
-            course_title="Test Course on AI", 
+            course_title="Test Course on AI",
             lesson_number=1,
-            chunk_index=1
+            chunk_index=1,
         ),
         CourseChunk(
             content="Advanced topics include transformer architectures and attention mechanisms.",
             course_title="Test Course on AI",
-            lesson_number=2, 
-            chunk_index=2
-        )
+            lesson_number=2,
+            chunk_index=2,
+        ),
     ]
 
 
@@ -96,32 +98,20 @@ def sample_search_results():
     return SearchResults(
         documents=[
             "This is an introduction to AI concepts. We'll cover machine learning basics.",
-            "Neural networks are fundamental building blocks of deep learning systems."
+            "Neural networks are fundamental building blocks of deep learning systems.",
         ],
         metadata=[
-            {
-                "course_title": "Test Course on AI",
-                "lesson_number": 0,
-                "chunk_index": 0
-            },
-            {
-                "course_title": "Test Course on AI", 
-                "lesson_number": 1,
-                "chunk_index": 1
-            }
+            {"course_title": "Test Course on AI", "lesson_number": 0, "chunk_index": 0},
+            {"course_title": "Test Course on AI", "lesson_number": 1, "chunk_index": 1},
         ],
-        distances=[0.1, 0.2]
+        distances=[0.1, 0.2],
     )
 
 
 @pytest.fixture
 def empty_search_results():
     """Empty search results for testing"""
-    return SearchResults(
-        documents=[],
-        metadata=[],
-        distances=[]
-    )
+    return SearchResults(documents=[], metadata=[], distances=[])
 
 
 @pytest.fixture
@@ -137,7 +127,7 @@ def mock_vector_store():
     mock.search.return_value = SearchResults(
         documents=["Sample content"],
         metadata=[{"course_title": "Test Course", "lesson_number": 1}],
-        distances=[0.1]
+        distances=[0.1],
     )
     mock.get_lesson_link.return_value = "https://example.com/lesson1"
     return mock
@@ -148,14 +138,14 @@ def mock_anthropic_response_with_tools():
     """Mock Anthropic response that uses tools"""
     mock_response = Mock()
     mock_response.stop_reason = "tool_use"
-    
+
     # Create mock content block for tool use
     mock_tool_content = Mock()
     mock_tool_content.type = "tool_use"
     mock_tool_content.name = "search_course_content"
     mock_tool_content.input = {"query": "neural networks", "course_name": "AI"}
     mock_tool_content.id = "tool_123"
-    
+
     mock_response.content = [mock_tool_content]
     return mock_response
 
@@ -165,11 +155,11 @@ def mock_anthropic_response_direct():
     """Mock Anthropic response without tool use"""
     mock_response = Mock()
     mock_response.stop_reason = "end_turn"
-    
+
     # Create mock content block for text response
     mock_text_content = Mock()
     mock_text_content.text = "This is a general knowledge answer about AI concepts."
-    
+
     mock_response.content = [mock_text_content]
     return mock_response
 
@@ -189,14 +179,8 @@ def mock_anthropic_client():
 def sample_sources():
     """Sample sources for testing UI integration"""
     return [
-        {
-            "text": "Test Course on AI - Lesson 0",
-            "url": "https://example.com/lesson0"
-        },
-        {
-            "text": "Test Course on AI - Lesson 1", 
-            "url": "https://example.com/lesson1"
-        }
+        {"text": "Test Course on AI - Lesson 0", "url": "https://example.com/lesson0"},
+        {"text": "Test Course on AI - Lesson 1", "url": "https://example.com/lesson1"},
     ]
 
 
@@ -206,8 +190,8 @@ def test_queries():
     """Various test queries for different scenarios"""
     return {
         "content_specific": "How do neural networks work in deep learning?",
-        "course_specific": "What topics are covered in the AI course?", 
+        "course_specific": "What topics are covered in the AI course?",
         "lesson_specific": "What is covered in lesson 1 of the AI course?",
         "general_knowledge": "What is the capital of France?",
-        "course_outline": "What lessons are in the MCP course?"
+        "course_outline": "What lessons are in the MCP course?",
     }

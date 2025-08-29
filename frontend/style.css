@@ -494,15 +494,16 @@ header h1 {
     font-weight: 600;
     color: var(--text-secondary);
     cursor: pointer;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-color);
-    background: var(--background);
+    padding: 0.5rem 0;
+    border: none;
+    background: none;
     border-radius: 8px;
     outline: none;
     transition: all 0.2s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 0.5rem;
+    text-align: left;
 }
 
 .new-chat-button:focus {
@@ -510,9 +511,15 @@ header h1 {
     box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
+.new-chat-button::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 0.5rem;
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
 .new-chat-button:hover {
-    background: var(--surface-hover);
-    border-color: var(--primary-color);
     color: var(--primary-color);
     transform: translateX(2px);
 }

@@ -245,6 +245,32 @@ header h1 {
     color: var(--text-secondary);
 }
 
+/* Source Link Styling */
+.source-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+}
+
+.source-link:hover {
+    color: var(--primary-hover);
+    border-bottom: 1px solid var(--primary-hover);
+    text-decoration: none;
+}
+
+.source-link:focus {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Source text without links */
+.source-text {
+    color: var(--text-secondary);
+}
+
 /* Markdown formatting styles */
 .message-content h1,
 .message-content h2,

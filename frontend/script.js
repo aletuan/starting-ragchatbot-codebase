@@ -136,32 +136,32 @@ function addMessage(content, type, sources = null, isWelcome = false) {
     let html = `<div class="message-content">${displayContent}</div>`;
     
     if (sources && sources.length > 0) {
-        // Generate clickable sources HTML
+        // Generate clickable sources HTML as list items
         const sourcesHtml = sources.map(source => {
             // Handle both old string format and new object format
             if (typeof source === 'string') {
                 // Backward compatibility: plain text source
-                return `<span class="source-text">${escapeHtml(source)}</span>`;
+                return `<li class="source-item"><span class="source-text">${escapeHtml(source)}</span></li>`;
             } else if (source && typeof source === 'object') {
                 // New object format with text and url
                 const text = escapeHtml(source.text || 'Unknown source');
                 if (source.url) {
                     // Create clickable link that opens in new tab
-                    return `<a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" class="source-link">${text}</a>`;
+                    return `<li class="source-item"><a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer" class="source-link">${text}</a></li>`;
                 } else {
                     // Plain text for sources without links
-                    return `<span class="source-text">${text}</span>`;
+                    return `<li class="source-item"><span class="source-text">${text}</span></li>`;
                 }
             } else {
                 // Fallback for unexpected format
-                return `<span class="source-text">${escapeHtml(String(source))}</span>`;
+                return `<li class="source-item"><span class="source-text">${escapeHtml(String(source))}</span></li>`;
             }
-        }).join(', ');
+        }).join('');
         
         html += `
             <details class="sources-collapsible">
                 <summary class="sources-header">Sources</summary>
-                <div class="sources-content">${sourcesHtml}</div>
+                <ul class="sources-content sources-list">${sourcesHtml}</ul>
             </details>
         `;
     }
